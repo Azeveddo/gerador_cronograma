@@ -155,9 +155,12 @@
         <div class="modal-content">
             <div class="modal-title">Mensagem Pronta</div>
             <textarea id="final-text" class="pseudo-readonly"></textarea>
-            <div class="modal-actions">
-                <button class="btn-full" style="background: #cbd5e1; color: var(--text-main);" onclick="closeOutputModal()">Voltar</button>
-                <button class="btn-full btn-copy" style="background: var(--primary-blue); color: white;" onclick="copyText()">Copiar Texto</button>
+            <div class="modal-actions" style="flex-direction: column;">
+                <button class="btn-full" style="background: #25D366; color: white; width: 100%; font-size: 1.1rem;" onclick="sendToWhatsApp()">Enviar para WhatsApp</button>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <button class="btn-full" style="background: #cbd5e1; color: var(--text-main);" onclick="closeOutputModal()">Voltar</button>
+                    <button class="btn-full btn-copy" style="background: var(--primary-blue); color: white;" onclick="copyText()">Copiar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -459,7 +462,14 @@
             }
             setTimeout(() => { btn.innerText = originalText; btn.style.background = 'var(--primary-blue)'; closeOutputModal(); }, 2000);
         }
-
+        function sendToWhatsApp() {
+            const textarea = document.getElementById('final-text');
+            // O encodeURIComponent transforma espaços e quebras de linha em formato de link
+            const textToShare = encodeURIComponent(textarea.value);
+            
+            // Abre o WhatsApp com o texto pré-preenchido
+            window.open(`https://wa.me/?text=${textToShare}`, '_blank');
+        }
         // Inicializa Datalist e Primeira Tela
         updateDatalist();
         renderCard();
