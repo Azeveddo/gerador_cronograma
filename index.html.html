@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cronograma FUNASE</title>
+    <style>
+        :root {
+            --bg-color: #f0f4f8; 
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --primary-blue: #0ea5e9; 
+            --funase-blue: #1e3a8a; 
+            --danger: #ef4444; 
+            --success: #10b981;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 12px;
+            padding-bottom: calc(90px + env(safe-area-inset-bottom)); 
+        }
+        
+        /* Cabeçalho principal */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 { 
+            font-size: 1.2rem; margin: 0; color: var(--funase-blue); font-weight: 700; text-transform: uppercase; 
+        }
+        .btn-menu {
+            -webkit-appearance: none; background: var(--border-color); border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; color: var(--funase-blue); cursor: pointer;
+        }
+
+        /* Indicador de passos */
+        .step-indicator {
+            text-align: center; font-size: 0.85rem; color: #64748b; margin-bottom: 10px; font-weight: bold;
+        }
+
+        /* Cartão Principal */
+        .card {
+            background-color: var(--card-bg); border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 5px solid var(--primary-blue);
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+        }
+        .input-title {
+            -webkit-appearance: none; font-size: 16px; font-weight: 700; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--funase-blue); padding: 4px 0; width: 60%; text-transform: uppercase;
+        }
+        .input-title:focus { outline: none; border-bottom: 2px solid var(--primary-blue); }
+        
+        .time-input {
+            -webkit-appearance: none; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; width: 95px; text-align: center; font-size: 16px; font-weight: 600;
+        }
+
+        /* Novos Campos: Endereço e Observação */
+        .field-group { margin-bottom: 12px; }
+        .field-group label { display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 4px; font-weight: bold; }
+        .field-input {
+            -webkit-appearance: none; width: 100%; box-sizing: border-box; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 8px; font-size: 16px;
+        }
+        .field-input:focus { outline: none; border-color: var(--primary-blue); }
+
+        /* Chips (Nomes compactos) */
+        .chips-container {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding-top: 10px; border-top: 1px solid var(--border-color);
+        }
+        .chip {
+            background: #e0f2fe; color: #0284c7; padding: 6px 10px; border-radius: 16px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px; border: 1px solid #bae6fd;
+        }
+        .chip-text { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+        .chip-obs { color: #0369a1; font-size: 0.75rem; font-style: italic; }
+        .chip-remove {
+            background: none; border: none; color: var(--danger); font-size: 1.2rem; line-height: 1; padding: 0 4px; cursor: pointer; touch-action: manipulation; font-weight: bold;
+        }
+
+        .add-row { display: flex; gap: 8px; align-items: center; }
+        .btn-add {
+            -webkit-appearance: none; background: var(--primary-blue); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;
+        }
+
+        /* Navegação Fixa Inferior */
+        .nav-footer {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 15px rgba(0,0,0,0.1); display: flex; justify-content: space-between; gap: 8px; z-index: 50;
+        }
+        .nav-btn {
+            -webkit-appearance: none; flex: 1; padding: 14px 0; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; text-transform: uppercase; cursor: pointer;
+        }
+        .btn-prev { background: #e2e8f0; color: #475569; }
+        .btn-next { background: var(--funase-blue); color: white; }
+        .btn-new-act { background: var(--success); color: white; flex: 0.5; font-size: 1.2rem; }
+
+        /* Modais */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); padding: 16px; z-index: 1000; align-items: center; justify-content: center; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+        }
+        .modal-content {
+            background: var(--card-bg); width: 100%; max-height: 85%; border-radius: 12px; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow-y: auto;
+        }
+        .modal-title { font-size: 1.1rem; color: var(--funase-blue); font-weight: bold; margin-bottom: 12px; text-align: center; }
+        .modal-actions { display: flex; gap: 12px; margin-top: 16px; }
+        textarea {
+            -webkit-appearance: none; width: 100%; box-sizing: border-box; background: #f8fafc; color: var(--text-main); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; resize: none; font-family: inherit; font-size: 16px; line-height: 1.5; min-height: 150px;
+        }
+        textarea.pseudo-readonly { pointer-events: none; }
+        .btn-full { -webkit-appearance: none; flex: 1; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        
+        /* Lista do Menu de Adolescentes */
+        .manage-list { list-style: none; padding: 0; margin: 0; }
+        .manage-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .manage-input { -webkit-appearance: none; flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <datalist id="address-list">
+        <option value="Policlínica Cônego Pedro Souza Leão - Rua Joaquim Tenório, s/n, Cavaleiro, Jaboatão/PE">
+        <option value="Rua Joaquim Nabuco, 747 - Loja 07, Derby">
+        <option value="IMOP - Avenida General Manoel Rabelo - Engenho Velho">
+        <option value="Malvinas">
+    </datalist>
+
+    <datalist id="adolescentes-list"></datalist>
+
+    <!-- Tela Principal do Wizard -->
+    <div id="wizard-view">
+        <div class="header-top">
+            <h1>Cronograma FUNASE</h1>
+            <button class="btn-menu" onclick="openMenu()">⚙️ Nomes</button>
+        </div>
+        
+        <div class="step-indicator" id="step-count">Card 1 de X</div>
+        
+        <div id="card-container"></div>
+    </div>
+
+    <!-- Navegação -->
+    <div class="nav-footer">
+        <button class="nav-btn btn-prev" onclick="prevCard()">Anterior</button>
+        <button class="nav-btn btn-next" id="btn-next" onclick="nextCard()">Confirmar</button>
+        <button class="nav-btn btn-new-act" onclick="addNewActivity()" title="Nova Ação">➕</button>
+    </div>
+
+    <!-- Modal Final (Texto WhatsApp) -->
+    <div id="output-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">Mensagem Pronta</div>
+            <textarea id="final-text" class="pseudo-readonly"></textarea>
+            <div class="modal-actions">
+                <button class="btn-full" style="background: #cbd5e1; color: var(--text-main);" onclick="closeOutputModal()">Voltar</button>
+                <button class="btn-full btn-copy" style="background: var(--primary-blue); color: white;" onclick="copyText()">Copiar Texto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Observação do Menino -->
+    <div id="obs-modal" class="modal-overlay">
+        <div class="modal-content" style="max-height: 50%;">
+            <div class="modal-title" id="obs-boy-name">Observação</div>
+            <input type="text" id="obs-input" class="field-input" placeholder="Ex: levar documento, RG...">
+            <input type="hidden" id="obs-act-index">
+            <input type="hidden" id="obs-boy-index">
+            <div class="modal-actions">
+                <button class="btn-full" style="background: #cbd5e1; color: var(--text-main);" onclick="closeObsModal()">Cancelar</button>
+                <button class="btn-full" style="background: var(--primary-blue); color: white;" onclick="saveBoyObs()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Gerenciar Nomes Base -->
+    <div id="menu-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">Base de Adolescentes</div>
+            <p style="font-size: 0.8rem; color: #64748b; margin-top:0;">Altere os nomes aqui para encurtar ou atualize a lista. Isso afeta as sugestões.</p>
+            
+            <div class="add-row" style="margin-bottom: 16px;">
+                <input type="text" id="new-base-name" class="field-input" placeholder="Novo adolescente...">
+                <button class="btn-add" onclick="addBaseName()">Add</button>
+            </div>
+
+            <ul class="manage-list" id="manage-names-list"></ul>
+            
+            <div class="modal-actions">
+                <button class="btn-full" style="background: var(--success); color: white;" onclick="closeMenu()">Concluído</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* DADOS INICIAIS BASE */
+        const defaultAdolescentes = [
+            "ALEXANDRE JOSÉ DOS SANTOS", "ANDERSON MIGUEL RODRIGUES DE SOUZA SILVA", "ATOS LEANDRO DA SILVA", 
+            "CARLOS KAUÃ DA SILVA SOARES", "CHRISTIAN HEWILSON GABRIEL BEZERRA DA SILVA", "DANTE GOMES DA SILVA COSTA", 
+            "DAVI ALEXANDRE REIS DA SILVA", "DAVI FRANCISCO JOSÉ DOS SANTOS", "DAVYD LOURENÇO SOARES", 
+            "EDILSON JOSÉ DE LIMA FILHO", "EVERTON GUILHERME NUNES DA SILVA", "EVERTON JOSÉ DA SILVA", 
+            "FÁBIO ALEXANDRE ALVES SILVEIRA FILHO", "GILBERTO NUNES DA SILVA FILHO", "GIVANILDO SERAFIM MONTEIRO JÚNIOR", 
+            "JOÃO GABRIEL MARINHO DA SILVA", "JOÃO PEDRO DA SILVA EUFLAZINO", "JOSÉ EDUARDO FRANCISCO DE SOUZA", 
+            "JOSÉ IZAIAS ALBUQUERQUE DA SILVA", "JOSÉ KAIQUE DA SILVA RAMOS", "JOSÉ WESLY RUAN DA SILVA SANTOS", 
+            "KAUÃ GABRIEL DE ARAUJO BATISTA", "KAYO VINICIUS DA SILVA SANTOS", "LEANDRO GOMES CABRAL DA SILVA", 
+            "MAGNO DA SILVA LEAL", "MARCÍLIO GOMES DA SILVA", "OTÁVIO FERNANDO ALVES TEIXEIRA", 
+            "PAULO MIGUEL SILVA DE SOUZA", "PEDRO HYAGO MOTA DIAS", "PEDRO PAULO GOMES DA SILVA", 
+            "RHUAN CAIO DO NASCIMENTO", "RIAN JOSÉ VICENTE DE LIMA", "RICARDO FERREIRA DE SOUZA LIMA", 
+            "SAMUEL CRISTHIAN DE SOUZA OLIVEIRA", "SANDRO LUIZ DA SILVA", "VALMIR DA SILVA ANDRADE", 
+            "VICTOR GABRIEL SOARES FERREIRA", "YURI JOSÉ DOS SANTOS NASCIMENTO"
+        ];
+
+        // Novo modelo de dados v6 (suporta endereço e observações)
+        const initialActivities = [
+            { title: 'Escola Externa EREM Frei Jaboatão', time: '07:15', address: '', obs: '', names: [] },
+            { title: 'Psicoterapia', time: '08:20', address: '', obs: '', names: [] },
+            { title: 'Capsi', time: '12:00', address: '', obs: '', names: [] },
+            { title: 'Curso Profissionalizante', time: '12:00', address: '', obs: '', names: [] },
+            { title: 'CAPS', time: '14:00', address: '', obs: '', names: [] },
+            { title: 'UBS', time: '09:00', address: '', obs: '', names: [] },
+            { title: 'Consulta', time: '10:00', address: '', obs: '', names: [] }
+        ];
+
+        // Carrega ou inicializa estados
+        let baseNames = JSON.parse(localStorage.getItem('funaseBaseNames_v1')) || defaultAdolescentes;
+        let activities = JSON.parse(localStorage.getItem('funaseActs_v6'));
+        let currentStep = 0;
+
+        // Se for o primeiro acesso na V6, tenta migrar nomes da V5 (se existir)
+        if (!activities) {
+            let oldData = JSON.parse(localStorage.getItem('cronogramaApp_v5'));
+            if (oldData && oldData.length > 0) {
+                activities = oldData.map(act => ({
+                    title: act.title, time: act.time, address: '', obs: '',
+                    names: act.names.map(n => ({ name: n, obs: '' }))
+                }));
+            } else {
+                activities = initialActivities;
+            }
+            saveActivities();
+        }
+
+        function saveActivities() { localStorage.setItem('funaseActs_v6', JSON.stringify(activities)); }
+        function saveBaseNames() { localStorage.setItem('funaseBaseNames_v1', JSON.stringify(baseNames)); updateDatalist(); }
+
+        /* RENDERIZAÇÃO DO WIZARD */
+        function renderCard() {
+            if(activities.length === 0) return;
+            const container = document.getElementById('card-container');
+            const act = activities[currentStep];
+            
+            document.getElementById('step-count').innerText = `Atividade ${currentStep + 1} de ${activities.length}`;
+            
+            let chipsHtml = act.names.map((b, i) => `
+                <div class="chip">
+                    <span class="chip-text" onclick="openObsModal(${currentStep}, ${i})">${b.name}</span>
+                    ${b.obs ? `<span class="chip-obs">(${b.obs})</span>` : ''}
+                    <button class="chip-remove" onclick="removeBoy(${currentStep}, ${i})">×</button>
+                </div>
+            `).join('');
+
+            if(act.names.length === 0) {
+                chipsHtml = `<span style="font-size:0.8rem; color:#94a3b8; font-style:italic;">Nenhum adolescente nesta atividade.</span>`;
+            }
+
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <input type="text" value="${act.title}" class="input-title" onchange="updateAct('title', this.value)">
+                        <input type="time" class="time-input" value="${act.time}" onchange="updateAct('time', this.value)">
+                    </div>
+                    
+                    <div class="field-group">
+                        <label>Endereço / Local (Opcional)</label>
+                        <input type="text" class="field-input" list="address-list" placeholder="Ex: IMOP..." value="${act.address || ''}" onchange="updateAct('address', this.value)">
+                    </div>
+
+                    <div class="field-group">
+                        <label>Observação da Atividade (Opcional)</label>
+                        <input type="text" class="field-input" placeholder="Ex: Levar ofício..." value="${act.obs || ''}" onchange="updateAct('obs', this.value)">
+                    </div>
+
+                    <div class="chips-container">${chipsHtml}</div>
+
+                    <div class="add-row">
+                        <input type="text" id="add-name-input" class="field-input" list="adolescentes-list" placeholder="Adicionar menino..." onkeypress="if(event.key === 'Enter') addBoy()">
+                        <button class="btn-add" onclick="addBoy()">Add</button>
+                    </div>
+                </div>
+            `;
+
+            // Controla botões de nav
+            const btnNext = document.getElementById('btn-next');
+            if (currentStep === activities.length - 1) {
+                btnNext.innerText = 'Finalizar Relatório';
+                btnNext.style.background = 'var(--success)';
+            } else {
+                btnNext.innerText = 'Confirmar / Próximo';
+                btnNext.style.background = 'var(--funase-blue)';
+            }
+        }
+
+        /* LÓGICA DE NAVEGAÇÃO E ATUALIZAÇÃO */
+        function updateAct(field, val) { activities[currentStep][field] = val; saveActivities(); }
+        
+        function addBoy() {
+            const input = document.getElementById('add-name-input');
+            const val = input.value.trim().toUpperCase();
+            if (val) {
+                activities[currentStep].names.push({ name: val, obs: '' });
+                input.value = '';
+                saveActivities();
+                renderCard();
+            }
+        }
+
+        function removeBoy(actIdx, boyIdx) {
+            activities[actIdx].names.splice(boyIdx, 1);
+            saveActivities();
+            renderCard();
+        }
+
+        function addNewActivity() {
+            activities.push({ title: 'NOVA ATIVIDADE', time: '12:00', address: '', obs: '', names: [] });
+            currentStep = activities.length - 1;
+            saveActivities();
+            renderCard();
+        }
+
+        function prevCard() {
+            if (currentStep > 0) { currentStep--; renderCard(); }
+        }
+
+        function nextCard() {
+            if (currentStep < activities.length - 1) {
+                currentStep++; renderCard();
+            } else {
+                generateText(); // É o último, gera o texto
+            }
+        }
+
+        /* LÓGICA DE OBSERVAÇÃO INDIVIDUAL (MENINO) */
+        function openObsModal(actIdx, boyIdx) {
+            const boy = activities[actIdx].names[boyIdx];
+            document.getElementById('obs-boy-name').innerText = 'Obs: ' + boy.name.split(' ')[0];
+            document.getElementById('obs-input').value = boy.obs || '';
+            document.getElementById('obs-act-index').value = actIdx;
+            document.getElementById('obs-boy-index').value = boyIdx;
+            document.getElementById('obs-modal').style.display = 'flex';
+        }
+        function closeObsModal() { document.getElementById('obs-modal').style.display = 'none'; }
+        function saveBoyObs() {
+            const actIdx = document.getElementById('obs-act-index').value;
+            const boyIdx = document.getElementById('obs-boy-index').value;
+            const obsVal = document.getElementById('obs-input').value.trim();
+            activities[actIdx].names[boyIdx].obs = obsVal;
+            saveActivities();
+            closeObsModal();
+            renderCard();
+        }
+
+        /* MENU DE GERENCIAR NOMES BASE (Encurtar/Editar) */
+        function updateDatalist() {
+            const dl = document.getElementById('adolescentes-list');
+            dl.innerHTML = baseNames.sort().map(n => `<option value="${n}">`).join('');
+        }
+        
+        function openMenu() {
+            renderMenuNames();
+            document.getElementById('menu-modal').style.display = 'flex';
+        }
+        function closeMenu() { document.getElementById('menu-modal').style.display = 'none'; }
+
+        function renderMenuNames() {
+            const ul = document.getElementById('manage-names-list');
+            ul.innerHTML = baseNames.map((name, idx) => `
+                <li class="manage-item">
+                    <input type="text" class="manage-input" value="${name}" onchange="updateBaseName(${idx}, this.value)">
+                    <button class="chip-remove" onclick="removeBaseName(${idx})">×</button>
+                </li>
+            `).join('');
+        }
+        function updateBaseName(idx, newVal) {
+            newVal = newVal.trim().toUpperCase();
+            if(newVal) { baseNames[idx] = newVal; saveBaseNames(); }
+        }
+        function removeBaseName(idx) {
+            baseNames.splice(idx, 1); saveBaseNames(); renderMenuNames();
+        }
+        function addBaseName() {
+            const val = document.getElementById('new-base-name').value.trim().toUpperCase();
+            if(val) { baseNames.push(val); document.getElementById('new-base-name').value = ''; saveBaseNames(); renderMenuNames(); }
+        }
+
+        /* GERAÇÃO DE RELATÓRIO FINAL */
+        function getTomorrowString() {
+            const days = ['DOMINGO', 'SEGUNDA FEIRA', 'TERÇA FEIRA', 'QUARTA FEIRA', 'QUINTA FEIRA', 'SEXTA FEIRA', 'SÁBADO'];
+            const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+            return `${days[tomorrow.getDay()]} (${String(tomorrow.getDate()).padStart(2,'0')}/${String(tomorrow.getMonth()+1).padStart(2,'0')}):`;
+        }
+
+        function generateText() {
+            let text = getTomorrowString() + '\n\n';
+            
+            activities.forEach(act => {
+                if (act.names.length > 0) { 
+                    const timeFmt = act.time.replace(':', 'h');
+                    
+                    if (act.title.toLowerCase().includes('escola')) {
+                        text += `*${timeFmt} - ${act.title.toUpperCase()}*\n`;
+                    } else {
+                        text += `*${act.title.toUpperCase()} ${timeFmt}*\n`;
+                    }
+                    
+                    // Adicionado as regras de formatação aqui (Negrito/Itálico)
+                    if(act.address && act.address.trim() !== '') text += `*_Endereço: ${act.address}_*\n`;
+                    if(act.obs && act.obs.trim() !== '') text += `*Obs: ${act.obs}*\n`;
+                    
+                    text += '\n'; 
+
+                    act.names.forEach(b => {
+                        let boyTxt = `- ${b.name}`;
+                        // Adicionado a regra de formatação para observação do menino (Negrito)
+                        if(b.obs && b.obs.trim() !== '') boyTxt += ` *(${b.obs})*`;
+                        text += `${boyTxt}\n`;
+                    });
+                    text += '\n\n'; 
+                }
+            });
+
+            document.getElementById('final-text').value = text.trim();
+            document.getElementById('output-modal').style.display = 'flex';
+        }
+
+        function closeOutputModal() { document.getElementById('output-modal').style.display = 'none'; }
+
+        async function copyText() {
+            const textarea = document.getElementById('final-text');
+            const btn = document.querySelector('.btn-copy');
+            const originalText = btn.innerText;
+
+            try {
+                await navigator.clipboard.writeText(textarea.value);
+                btn.innerText = 'Copiado! ✓'; btn.style.background = 'var(--success)';
+            } catch (err) {
+                textarea.style.pointerEvents = 'auto'; textarea.contentEditable = true; textarea.readOnly = false;
+                const range = document.createRange(); range.selectNodeContents(textarea);
+                const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+                textarea.setSelectionRange(0, 999999);
+                document.execCommand('copy');
+                textarea.contentEditable = false; textarea.style.pointerEvents = 'none';
+                btn.innerText = 'Copiado! ✓'; btn.style.background = 'var(--success)';
+            }
+            setTimeout(() => { btn.innerText = originalText; btn.style.background = 'var(--primary-blue)'; closeOutputModal(); }, 2000);
+        }
+
+        // Inicializa Datalist e Primeira Tela
+        updateDatalist();
+        renderCard();
+    </script>
+</body>
+</html>
