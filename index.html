@@ -405,30 +405,33 @@
         function generateText() {
             let text = getTomorrowString() + '\n\n';
             
-            activities.forEach(act => {
-                if (act.names.length > 0) { 
-                    const timeFmt = act.time.replace(':', 'h');
-                    
-                    if (act.title.toLowerCase().includes('escola')) {
-                        text += `*${timeFmt} - ${act.title.toUpperCase()}*\n`;
-                    } else {
-                        text += `*${act.title.toUpperCase()} ${timeFmt}*\n`;
-                    }
-                    
-                    // Adicionado as regras de formatação aqui (Negrito/Itálico)
-                    if(act.address && act.address.trim() !== '') text += `*_Endereço: ${act.address}_*\n`;
-                    if(act.obs && act.obs.trim() !== '') text += `*Obs: ${act.obs}*\n`;
-                    
-                    text += '\n'; 
-
-                    act.names.forEach(b => {
-                        let boyTxt = `- ${b.name}`;
-                        // Adicionado a regra de formatação para observação do menino (Negrito)
-                        if(b.obs && b.obs.trim() !== '') boyTxt += ` *(${b.obs})*`;
-                        text += `${boyTxt}\n`;
-                    });
-                    text += '\n\n'; 
+            // Filtra as atividades com adolescentes e ordena pelo horário (do mais cedo pro mais tarde)
+            const atividadesOrdenadas = activities
+                .filter(act => act.names.length > 0)
+                .sort((a, b) => a.time.localeCompare(b.time));
+            
+            atividadesOrdenadas.forEach(act => {
+                const timeFmt = act.time.replace(':', 'h');
+                
+                if (act.title.toLowerCase().includes('escola')) {
+                    text += `*${timeFmt} - ${act.title.toUpperCase()}*\n`;
+                } else {
+                    text += `*${act.title.toUpperCase()} ${timeFmt}*\n`;
                 }
+                
+                // Adicionado as regras de formatação aqui (Negrito/Itálico)
+                if(act.address && act.address.trim() !== '') text += `*_Endereço: ${act.address}_*\n`;
+                if(act.obs && act.obs.trim() !== '') text += `*Obs: ${act.obs}*\n`;
+                
+                text += '\n'; 
+
+                act.names.forEach(b => {
+                    let boyTxt = `- ${b.name}`;
+                    // Adicionado a regra de formatação para observação do menino (Negrito)
+                    if(b.obs && b.obs.trim() !== '') boyTxt += ` *(${b.obs})*`;
+                    text += `${boyTxt}\n`;
+                });
+                text += '\n\n'; 
             });
 
             document.getElementById('final-text').value = text.trim();
