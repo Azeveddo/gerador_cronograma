@@ -79,12 +79,11 @@
             font-weight: 600; 
         }
 
-        /* CORREÇÃO 3: Espaço extra na parte inferior para os cards não baterem no dock */
         .stack-area { 
             position: relative; 
             padding: 0 20px; 
             margin-top: 10px; 
-            margin-bottom: 35px; /* Empurra o dock para baixo dando respiro */
+            margin-bottom: 35px;
         }
 
         .stack-bg-2 { 
@@ -104,6 +103,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.02); 
         }
 
+        /* Cartão Principal: Animação isolada para não piscar */
         .card-main {
             position: relative; 
             background-color: var(--card-bg); 
@@ -112,7 +112,6 @@
             box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1); 
             z-index: 3; 
             border: 1px solid rgba(0,0,0,0.03);
-            animation: slideIn 0.3s ease-out; 
             display: flex; 
             flex-direction: column; 
             gap: 20px;
@@ -121,6 +120,10 @@
         @keyframes slideIn { 
             from { opacity: 0; transform: translateX(20px); } 
             to { opacity: 1; transform: translateX(0); } 
+        }
+
+        .anim-slide { 
+            animation: slideIn 0.3s ease-out; 
         }
 
         .card-title-group { display: flex; flex-direction: column; gap: 4px; }
@@ -215,7 +218,6 @@
                 <button class="drawer-menu-btn" onclick="openDrawerView('view-history', 'Histórico')">🕒 Histórico (30 dias)</button>
             </div>
 
-            <!-- CORREÇÃO 2: Botão Add do submenu Nomes virou + -->
             <div class="drawer-content" id="view-names">
                 <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Atualize a base de adolescentes para o preenchimento automático.</p>
@@ -226,7 +228,6 @@
                 <ul class="manage-list" id="manage-names-list"></ul>
             </div>
 
-            <!-- CORREÇÃO 2: Botão Add do submenu Endereços virou + -->
             <div class="drawer-content" id="view-addresses">
                 <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Cadastre locais e endereços recorrentes.</p>
@@ -328,7 +329,9 @@
         let baseAddresses = JSON.parse(localStorage.getItem('funaseBaseAddr_v2')) || defaultAddresses;
         let scheduleHistory = JSON.parse(localStorage.getItem('funaseHistory_v1')) || [];
         let activities = JSON.parse(localStorage.getItem('funaseActs_v6')) || initialActivities;
+        
         let currentStep = 0;
+        let isChangingCard = true; // Controla quando a animação de slide ocorre
 
         function saveActivities() { localStorage.setItem('funaseActs_v6', JSON.stringify(activities)); }
         
@@ -472,9 +475,12 @@
                 </div>
             `).join('');
 
-            // CORREÇÃO 1: Botão Add do card virou um + quadrado flex fixo.
+            // Aplica a classe de animação somente se estiver navegando entre cartões
+            const animClass = isChangingCard ? 'anim-slide' : '';
+            isChangingCard = false; // Desliga após renderizar
+
             container.innerHTML = `
-                <div class="card-main">
+                <div class="card-main ${animClass}">
                     <div class="card-title-group">
                         <label style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">TÍTULO DA ATIVIDADE</label>
                         <input type="text" value="${act.title}" class="input-title" onchange="updateAct('title', this.value)">
@@ -540,9 +546,11 @@
         }
 
         function removeBoy(actIdx, boyIdx) { activities[actIdx].names.splice(boyIdx, 1); saveActivities(); renderCard(); }
-        function addNewActivity() { activities.push({ title: 'NOVA ATIVIDADE', time: '12:00', address: '', obs: '', names: [] }); currentStep = activities.length - 1; saveActivities(); renderCard(); }
-        function prevCard() { if (currentStep > 0) { currentStep--; renderCard(); } }
-        function nextCard() { if (currentStep < activities.length - 1) { currentStep++; renderCard(); } }
+        
+        // Ativação da flag isChangingCard nos botões de navegação e adição de atividade
+        function addNewActivity() { activities.push({ title: 'NOVA ATIVIDADE', time: '12:00', address: '', obs: '', names: [] }); isChangingCard = true; currentStep = activities.length - 1; saveActivities(); renderCard(); }
+        function prevCard() { if (currentStep > 0) { isChangingCard = true; currentStep--; renderCard(); } }
+        function nextCard() { if (currentStep < activities.length - 1) { isChangingCard = true; currentStep++; renderCard(); } }
 
         /* ====== Modais de Observação ====== */
         function openObsModal(actIdx, boyIdx) { 
