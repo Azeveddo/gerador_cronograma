@@ -103,6 +103,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.02); 
         }
 
+        /* Cartão Principal */
         .card-main {
             position: relative; 
             background-color: var(--card-bg); 
@@ -138,6 +139,16 @@
         .clean-field label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .clean-input { -webkit-appearance: none; background: #f8fafc; border: 1px solid transparent; border-bottom: 2px solid var(--border); padding: 10px 12px; border-radius: 8px 8px 0 0; font-size: 0.95rem; color: var(--text-main); font-family: inherit; transition: all 0.2s; }
         .clean-input:focus { outline: none; border-bottom-color: var(--primary); background: white; box-shadow: 0 4px 6px -4px var(--focus-ring); }
+
+        /* Customização visual extra para o Select de Endereço */
+        select.clean-input {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
 
         .chips-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .chip { background: #f1f5f9; color: var(--text-main); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); }
@@ -330,12 +341,12 @@
         let activities = JSON.parse(localStorage.getItem('funaseActs_v6')) || initialActivities;
         
         let currentStep = 0;
-        let isChangingCard = true; // Controla quando a animação de slide ocorre
+        let isChangingCard = true; 
 
         function saveActivities() { localStorage.setItem('funaseActs_v6', JSON.stringify(activities)); }
         
-        /* ====== LÓGICA DE AUTO-COMPLETE CUSTOMIZADO ====== */
-        function setupAutocomplete(inp, arr, isNameInput = false) {
+        /* ====== LÓGICA DE AUTO-COMPLETE CUSTOMIZADO (Apenas Nomes) ====== */
+        function setupAutocomplete(inp, arr) {
             inp.addEventListener("input", function(e) {
                 let a, b, val = this.value;
                 closeAllLists();
@@ -359,12 +370,7 @@
                         b.addEventListener("click", function(e) {
                             inp.value = this.getElementsByTagName("input")[0].value;
                             closeAllLists();
-                            
-                            if(isNameInput) {
-                                addBoy(); 
-                            } else {
-                                inp.dispatchEvent(new Event('change'));
-                            }
+                            addBoy(); 
                         });
                         a.appendChild(b);
                     }
@@ -458,6 +464,26 @@
             `}).join('');
         }
 
+        /* ===== LÓGICA DE ENDEREÇO (SELECT/NOVO) ===== */
+        function handleAddressChange(val) {
+            if (val === 'ADD_NEW_ADDRESS') {
+                const newAddr = prompt("Digite o novo endereço ou local:");
+                if (newAddr && newAddr.trim() !== '') {
+                    const finalAddr = newAddr.trim();
+                    if (!baseAddresses.includes(finalAddr)) {
+                        baseAddresses.push(finalAddr);
+                        saveBaseAddresses();
+                    }
+                    updateAct('address', finalAddr);
+                } else {
+                    // Reverte se cancelar
+                    renderCard(); 
+                }
+            } else {
+                updateAct('address', val);
+            }
+        }
+
         /* ===== RENDER CARTÃO PRINCIPAL ===== */
         function renderCard() {
             if(activities.length === 0) return;
@@ -474,9 +500,19 @@
                 </div>
             `).join('');
 
-            // Aplica a classe de animação somente se estiver navegando entre cartões
             const animClass = isChangingCard ? 'anim-slide' : '';
-            isChangingCard = false; // Desliga após renderizar
+            isChangingCard = false; 
+
+            // Monta as opções de endereço
+            let addressOptions = `<option value="">Nenhum (Opcional)</option>`;
+            baseAddresses.forEach(addr => {
+                const selected = (act.address === addr) ? 'selected' : '';
+                addressOptions += `<option value="${addr}" ${selected}>${addr}</option>`;
+            });
+            if (act.address && !baseAddresses.includes(act.address)) {
+                 addressOptions += `<option value="${act.address}" selected>${act.address}</option>`;
+            }
+            addressOptions += `<option value="ADD_NEW_ADDRESS" style="font-weight: bold; color: var(--primary);">+ Adicionar novo endereço...</option>`;
 
             container.innerHTML = `
                 <div class="card-main ${animClass}">
@@ -492,7 +528,9 @@
                     <div class="clean-field">
                         <label>Endereço / Local</label>
                         <div style="position: relative; width: 100%;">
-                            <input type="text" id="address-input" class="clean-input" style="width: 100%; box-sizing: border-box;" placeholder="Opcional..." value="${act.address || ''}" onchange="updateAct('address', this.value)" autocomplete="off">
+                            <select id="address-input" class="clean-input" style="width: 100%; box-sizing: border-box;" onchange="handleAddressChange(this.value)">
+                                ${addressOptions}
+                            </select>
                         </div>
                     </div>
                     
@@ -527,22 +565,18 @@
                 </div>
             `;
 
-            // Mapeia quais nomes JÁ ESTÃO no card atual
             const currentAddedNames = act.names.map(b => b.name);
-            // Filtra a base baseNames para repassar ao autocomplete SOMENTE quem ainda não foi adicionado
             const availableNames = baseNames.filter(n => !currentAddedNames.includes(n));
 
-            setupAutocomplete(document.getElementById('address-input'), baseAddresses, false);
-            setupAutocomplete(document.getElementById('add-name-input'), availableNames, true);
+            setupAutocomplete(document.getElementById('add-name-input'), availableNames);
         }
 
-        function updateAct(field, val) { activities[currentStep][field] = val; saveActivities(); }
+        function updateAct(field, val) { activities[currentStep][field] = val; saveActivities(); renderCard(); }
 
         function addBoy() { 
             const input = document.getElementById('add-name-input'); 
             const val = input.value.trim().toUpperCase(); 
             if (val) { 
-                // Impede adição duplicada caso o usuário insira manualmente (bypass do autocomplete)
                 const isDuplicate = activities[currentStep].names.some(b => b.name === val);
                 if (isDuplicate) {
                     alert("Este adolescente já foi adicionado a esta atividade!");
@@ -559,7 +593,6 @@
 
         function removeBoy(actIdx, boyIdx) { activities[actIdx].names.splice(boyIdx, 1); saveActivities(); renderCard(); }
         
-        // Ativação da flag isChangingCard nos botões de navegação e adição de atividade
         function addNewActivity() { activities.push({ title: 'NOVA ATIVIDADE', time: '12:00', address: '', obs: '', names: [] }); isChangingCard = true; currentStep = activities.length - 1; saveActivities(); renderCard(); }
         function prevCard() { if (currentStep > 0) { isChangingCard = true; currentStep--; renderCard(); } }
         function nextCard() { if (currentStep < activities.length - 1) { isChangingCard = true; currentStep++; renderCard(); } }
@@ -601,7 +634,7 @@
             atividadesOrdenadas.forEach(act => {
                 const timeFmt = act.time.replace(':', 'h');
                 text += (act.title.toLowerCase().includes('escola')) ? `*${timeFmt} - ${act.title.toUpperCase()}*\n` : `*${act.title.toUpperCase()} ${timeFmt}*\n`;
-                if(act.address) text += `*_Endereço: ${act.address}_*\n`;
+                if(act.address && act.address !== "ADD_NEW_ADDRESS") text += `*_Endereço: ${act.address}_*\n`;
                 if(act.obs) text += `*Obs: ${act.obs}*\n`;
                 text += '\n'; 
                 act.names.forEach(b => { text += `- ${b.name}${b.obs ? ` *(${b.obs})*` : ''}\n`; });
