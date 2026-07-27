@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cronograma FUNASE</title>
-    <!-- Fonte Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,7 +12,7 @@
             --text-main: #1e293b;
             --text-muted: #64748b;
             --primary: #0ea5e9; 
-            --header-bg: #1e3a8a; /* Azul escuro da FUNASE */
+            --header-bg: #1e3a8a;
             --danger: #ef4444; 
             --success: #10b981;
             --border: #cbd5e1;
@@ -29,7 +28,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Container Principal do App */
         .app-container {
             max-width: 500px;
             margin: 0 auto;
@@ -39,10 +37,9 @@
             background: #f1f5f9;
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
             position: relative;
-            overflow-x: hidden; /* FIX: Previne o menu lateral solto no Desktop */
+            overflow-x: hidden;
         }
         
-        /* Cabeçalho Topo */
         .app-header {
             background-color: var(--header-bg);
             color: white;
@@ -52,157 +49,37 @@
             justify-content: space-between;
             padding-top: calc(16px + env(safe-area-inset-top));
         }
-        .btn-hamburger {
-            background: none;
-            border: none;
-            color: white;
-            padding: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: -8px;
-        }
-        .app-header h1 { 
-            font-size: 1.1rem; 
-            margin: 0; 
-            font-weight: 700; 
-            letter-spacing: 0.5px;
-        }
+        .btn-hamburger { background: none; border: none; color: white; padding: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: -8px; }
+        .app-header h1 { font-size: 1.1rem; margin: 0; font-weight: 700; letter-spacing: 0.5px; }
         .header-spacer { width: 40px; }
 
-        /* Indicador Superior */
-        .step-indicator {
-            text-align: center; 
-            font-size: 0.85rem; 
-            color: var(--text-muted); 
-            margin: 20px 0 10px 0; 
-            font-weight: 600;
-        }
+        .step-indicator { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin: 20px 0 10px 0; font-weight: 600; }
 
-        /* ÁREA DOS CARTÕES EMPILHADOS */
-        .stack-area {
-            position: relative;
-            padding: 0 20px;
-            margin-top: 10px;
-            /* FIX: flex: 1 removido para evitar a caixa branca gigante */
-        }
-        
-        /* Falsos cartões no fundo para dar profundidade */
-        .stack-bg-2 {
-            position: absolute;
-            top: 24px; left: 36px; right: 36px; bottom: -24px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
-            z-index: 1;
-        }
-        .stack-bg-1 {
-            position: absolute;
-            top: 12px; left: 28px; right: 28px; bottom: -12px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 24px;
-            z-index: 2;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
+        .stack-area { position: relative; padding: 0 20px; margin-top: 10px; }
+        .stack-bg-2 { position: absolute; top: 24px; left: 36px; right: 36px; bottom: -24px; background: rgba(255, 255, 255, 0.4); border-radius: 24px; z-index: 1; }
+        .stack-bg-1 { position: absolute; top: 12px; left: 28px; right: 28px; bottom: -12px; background: rgba(255, 255, 255, 0.7); border-radius: 24px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 
-        /* Cartão Principal (Ativo) */
         .card-main {
-            position: relative;
-            background-color: var(--card-bg); 
-            border-radius: 24px; 
-            padding: 24px; 
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1); 
-            z-index: 3;
-            border: 1px solid rgba(0,0,0,0.03);
-            animation: slideIn 0.3s ease-out;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            position: relative; background-color: var(--card-bg); border-radius: 24px; padding: 24px; 
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1); z-index: 3; border: 1px solid rgba(0,0,0,0.03);
+            animation: slideIn 0.3s ease-out; display: flex; flex-direction: column; gap: 20px;
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Organização Visual Interna do Cartão */
-        .card-title-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .input-title {
-            -webkit-appearance: none; 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            background: transparent; 
-            border: none; 
-            color: var(--header-bg); 
-            width: 100%;
-            text-transform: uppercase;
-            font-family: inherit;
-            text-overflow: ellipsis; /* FIX: Evita título cortado de forma feia */
-        }
+        .card-title-group { display: flex; flex-direction: column; gap: 4px; }
+        .input-title { -webkit-appearance: none; font-size: 1.1rem; font-weight: 800; background: transparent; border: none; color: var(--header-bg); width: 100%; text-transform: uppercase; font-family: inherit; text-overflow: ellipsis; }
         .input-title:focus { outline: none; border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
         
-        .time-display {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -2px;
-            margin: -10px 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .time-input-hidden {
-            -webkit-appearance: none;
-            border: none;
-            background: transparent;
-            font-size: inherit;
-            font-weight: inherit;
-            color: inherit;
-            font-family: inherit;
-            padding: 0;
-            width: 180px; /* FIX: Largura aumentada para não cortar os minutos */
-            letter-spacing: inherit;
-            cursor: pointer;
-        }
+        .time-display { font-size: 3rem; font-weight: 800; color: var(--text-main); letter-spacing: -2px; margin: -10px 0; display: flex; align-items: center; }
+        .time-input-hidden { -webkit-appearance: none; border: none; background: transparent; font-size: inherit; font-weight: inherit; color: inherit; font-family: inherit; padding: 0; width: 180px; letter-spacing: inherit; cursor: pointer; }
         .time-input-hidden:focus { outline: none; color: var(--primary); }
-        /* FIX: Esconde o ícone de relógio nativo do Chrome que rouba espaço */
         .time-input-hidden::-webkit-calendar-picker-indicator { display: none; }
 
-        /* Campos Limpos */
-        .clean-field {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .clean-field label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-        .clean-input {
-            -webkit-appearance: none;
-            background: #f8fafc;
-            border: 1px solid transparent;
-            border-bottom: 2px solid var(--border);
-            padding: 10px 12px;
-            border-radius: 8px 8px 0 0;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-        .clean-input:focus {
-            outline: none;
-            border-bottom-color: var(--primary);
-            background: white;
-            box-shadow: 0 4px 6px -4px var(--focus-ring);
-        }
+        .clean-field { display: flex; flex-direction: column; gap: 4px; }
+        .clean-field label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .clean-input { -webkit-appearance: none; background: #f8fafc; border: 1px solid transparent; border-bottom: 2px solid var(--border); padding: 10px 12px; border-radius: 8px 8px 0 0; font-size: 0.95rem; color: var(--text-main); font-family: inherit; transition: all 0.2s; }
+        .clean-input:focus { outline: none; border-bottom-color: var(--primary); background: white; box-shadow: 0 4px 6px -4px var(--focus-ring); }
 
-        /* Chips */
         .chips-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .chip { background: #f1f5f9; color: var(--text-main); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); }
         .chip-obs { color: var(--primary); font-size: 0.75rem; font-style: italic; }
@@ -211,43 +88,18 @@
         .add-row { display: flex; gap: 8px; }
         .add-row .clean-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; }
 
-        /* Navegação interna do cartão */
-        .card-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            padding-top: 20px;
-            border-top: 1px dashed var(--border);
-        }
-        .btn-icon {
-            background: #f1f5f9;
-            border: none;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--header-bg); transition: 0.2s;
-        }
+        .card-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 20px; border-top: 1px dashed var(--border); }
+        .btn-icon { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--header-bg); transition: 0.2s; }
         .btn-icon:hover { background: #e2e8f0; }
         .btn-icon:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* DOCK INFERIOR FIXO */
-        .bottom-dock {
-            padding: 20px;
-            padding-bottom: calc(20px + env(safe-area-inset-bottom));
-            background: #f1f5f9;
-            display: flex;
-            gap: 12px;
-            margin-top: auto; /* FIX: Empurra o dock para o fundo da tela sem esticar o card */
-        }
-        .btn-primary {
-            -webkit-appearance: none; flex: 1; padding: 16px; border: none; border-radius: 16px; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: inherit; color: white; background: var(--header-bg); box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3); transition: 0.2s;
-        }
+        .bottom-dock { padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); background: #f1f5f9; display: flex; gap: 12px; margin-top: auto; }
+        .btn-primary { -webkit-appearance: none; flex: 1; padding: 16px; border: none; border-radius: 16px; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: inherit; color: white; background: var(--header-bg); box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3); transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .btn-primary:active { transform: scale(0.98); }
         .btn-primary.success { background: var(--success); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
         .btn-add-new { background: white; border: 1px solid var(--border); color: var(--header-bg); padding: 16px; border-radius: 16px; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-        /* MENU LATERAL (DRAWER) */
+        /* DRAWER & SUBMENUS */
         .drawer-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .drawer-overlay.active { opacity: 1; pointer-events: auto; }
         .drawer { position: absolute; top: 0; bottom: 0; left: -100%; width: 85%; max-width: 320px; background: white; z-index: 101; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
@@ -255,14 +107,23 @@
         .drawer-header { background: var(--header-bg); color: white; padding: 24px 20px; padding-top: calc(24px + env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; }
         .drawer-header h2 { margin: 0; font-size: 1.1rem; }
         .btn-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
+        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; display: none; }
+        .drawer-content.active { display: block; animation: slideIn 0.2s ease-out; }
 
-        /* Lista Drawer */
+        .drawer-menu-btn { width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 16px 8px; font-size: 1rem; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        .drawer-menu-btn:hover { background: #f8fafc; }
+        .btn-back-menu { background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 0; }
+        
         .manage-list { list-style: none; padding: 0; margin: 0; }
         .manage-item { display: flex; gap: 8px; margin-bottom: 12px; }
         .manage-input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; }
 
-        /* Modais */
+        /* Estilos do Histórico */
+        .history-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; background: #f8fafc; }
+        .history-header { font-weight: 800; color: var(--header-bg); font-size: 0.9rem; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
+        .history-preview { font-family: inherit; font-size: 0.8rem; color: var(--text-muted); white-space: pre-wrap; max-height: 120px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin: 0 0 12px 0; }
+        .history-badge { background: #e2e8f0; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; color: var(--text-main); }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
         .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
         textarea { width: 100%; box-sizing: border-box; background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 12px; resize: none; font-family: inherit; min-height: 200px; }
@@ -271,28 +132,54 @@
 <body>
 
     <div class="app-container">
-        <datalist id="address-list">
-            <option value="Policlínica Cônego Pedro Souza Leão - Cavaleiro">
-            <option value="Rua Joaquim Nabuco, 747 - Derby">
-            <option value="IMOP - Engenho Velho">
-            <option value="Malvinas">
-        </datalist>
+        <!-- Datalists Dinâmicos -->
+        <datalist id="address-list"></datalist>
         <datalist id="adolescentes-list"></datalist>
 
         <!-- Menu Lateral (Drawer) -->
         <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
         <div class="drawer" id="side-drawer">
             <div class="drawer-header">
-                <h2>Base de Nomes</h2>
+                <h2 id="drawer-title">Painel de Controle</h2>
                 <button class="btn-close" onclick="toggleDrawer()">×</button>
             </div>
-            <div class="drawer-content">
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Atualize a base para facilitar a digitação nos cartões.</p>
+            
+            <!-- MENU PRINCIPAL DO DRAWER -->
+            <div class="drawer-content active" id="view-menu">
+                <button class="drawer-menu-btn" onclick="openDrawerView('view-names', 'Base de Nomes')">👥 Base de Adolescentes</button>
+                <button class="drawer-menu-btn" onclick="openDrawerView('view-addresses', 'Base de Endereços')">📍 Base de Endereços</button>
+                <button class="drawer-menu-btn" onclick="openDrawerView('view-history', 'Histórico')">🕒 Histórico (30 dias)</button>
+            </div>
+
+            <!-- SUBMENU: NOMES -->
+            <div class="drawer-content" id="view-names">
+                <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Atualize a base de adolescentes para o preenchimento automático.</p>
                 <div style="display: flex; gap: 8px; margin-bottom: 20px;">
                     <input type="text" id="new-base-name" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1;" placeholder="Novo adolescente...">
                     <button class="btn-add-new" style="padding: 10px; border-radius: 8px;" onclick="addBaseName()">Add</button>
                 </div>
                 <ul class="manage-list" id="manage-names-list"></ul>
+            </div>
+
+            <!-- SUBMENU: ENDEREÇOS -->
+            <div class="drawer-content" id="view-addresses">
+                <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Cadastre locais e endereços recorrentes.</p>
+                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                    <input type="text" id="new-base-address" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1;" placeholder="Novo endereço...">
+                    <button class="btn-add-new" style="padding: 10px; border-radius: 8px;" onclick="addBaseAddress()">Add</button>
+                </div>
+                <ul class="manage-list" id="manage-address-list"></ul>
+            </div>
+
+            <!-- SUBMENU: HISTÓRICO -->
+            <div class="drawer-content" id="view-history">
+                <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Cronogramas gerados nos últimos 30 dias.</p>
+                <div id="history-container">
+                    <!-- Cards de histórico renderizados via JS -->
+                </div>
             </div>
         </div>
 
@@ -311,9 +198,7 @@
         <div class="stack-area">
             <div class="stack-bg-2"></div>
             <div class="stack-bg-1"></div>
-            <div id="card-container">
-                <!-- O conteúdo do cartão renderiza aqui -->
-            </div>
+            <div id="card-container"></div>
         </div>
 
         <!-- Conclusão Isolada -->
@@ -333,7 +218,7 @@
             <button class="btn-primary" style="background: #25D366;" onclick="sendToWhatsApp()">Enviar para WhatsApp</button>
             <div style="display:flex; gap:12px;">
                 <button class="btn-add-new" style="flex:1;" onclick="closeOutputModal()">Voltar</button>
-                <button class="btn-primary btn-copy" style="flex:1;" onclick="copyText()">Copiar</button>
+                <button class="btn-primary btn-copy" id="btn-copy-main" style="flex:1;" onclick="copyText('final-text', 'btn-copy-main')">Copiar</button>
             </div>
         </div>
     </div>
@@ -353,31 +238,88 @@
 
     <script>
         /* DADOS INICIAIS BASE */
-        const defaultAdolescentes = [
-            "ALEXANDRE JOSÉ DOS SANTOS", "ANDERSON MIGUEL RODRIGUES DE SOUZA SILVA", "ATOS LEANDRO DA SILVA", 
-            "CARLOS KAUÃ DA SILVA SOARES", "CHRISTIAN HEWILSON GABRIEL BEZERRA DA SILVA", "DANTE GOMES DA SILVA COSTA", 
-            "DAVI ALEXANDRE REIS DA SILVA", "DAVI FRANCISCO JOSÉ DOS SANTOS"
-        ];
-        const initialActivities = [
-            { title: 'Escola Externa EREM', time: '07:15', address: '', obs: '', names: [] },
-            { title: 'Psicoterapia', time: '08:20', address: '', obs: '', names: [] },
-            { title: 'Capsi', time: '12:00', address: '', obs: '', names: [] }
-        ];
+        const defaultAdolescentes = [ "ALEXANDRE JOSÉ DOS SANTOS", "ANDERSON MIGUEL", "ATOS LEANDRO", "CARLOS KAUÃ" ];
+        const defaultAddresses = [ "Policlínica Cônego Pedro Souza Leão - Cavaleiro", "Rua Joaquim Nabuco, 747 - Derby", "IMOP - Engenho Velho", "Malvinas" ];
+        const initialActivities = [ { title: 'Escola Externa EREM', time: '07:15', address: '', obs: '', names: [] } ];
 
+        /* STATES (Memória) */
         let baseNames = JSON.parse(localStorage.getItem('funaseBaseNames_v1')) || defaultAdolescentes;
+        let baseAddresses = JSON.parse(localStorage.getItem('funaseBaseAddr_v1')) || defaultAddresses;
+        let scheduleHistory = JSON.parse(localStorage.getItem('funaseHistory_v1')) || [];
         let activities = JSON.parse(localStorage.getItem('funaseActs_v6')) || initialActivities;
         let currentStep = 0;
 
         function saveActivities() { localStorage.setItem('funaseActs_v6', JSON.stringify(activities)); }
-        function saveBaseNames() { localStorage.setItem('funaseBaseNames_v1', JSON.stringify(baseNames)); updateDatalist(); renderMenuNames(); }
-
-        /* Drawer */
+        
+        /* Drawer Nav Logic */
         function toggleDrawer() {
             document.getElementById('side-drawer').classList.toggle('active');
             document.getElementById('drawer-overlay').classList.toggle('active');
+            openDrawerView('view-menu', 'Painel de Controle'); // Reseta pro menu principal
+        }
+        function openDrawerView(viewId, title) {
+            document.querySelectorAll('.drawer-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            document.getElementById('drawer-title').innerText = title;
         }
 
-        /* Render Cartão */
+        /* ===== BASE DE NOMES ===== */
+        function saveBaseNames() { localStorage.setItem('funaseBaseNames_v1', JSON.stringify(baseNames)); updateNamesDatalist(); renderMenuNames(); }
+        function updateNamesDatalist() { document.getElementById('adolescentes-list').innerHTML = baseNames.sort().map(n => `<option value="${n}">`).join(''); }
+        function renderMenuNames() {
+            document.getElementById('manage-names-list').innerHTML = baseNames.map((name, idx) => `
+                <li class="manage-item"><input type="text" class="manage-input" value="${name}" onchange="updateBaseName(${idx}, this.value)"><button class="chip-remove" style="width:36px; height:36px; color:var(--danger);" onclick="removeBaseName(${idx})">×</button></li>`).join('');
+        }
+        function updateBaseName(idx, newVal) { newVal = newVal.trim().toUpperCase(); if(newVal) { baseNames[idx] = newVal; saveBaseNames(); } }
+        function removeBaseName(idx) { baseNames.splice(idx, 1); saveBaseNames(); }
+        function addBaseName() { const val = document.getElementById('new-base-name').value.trim().toUpperCase(); if(val) { baseNames.push(val); document.getElementById('new-base-name').value = ''; saveBaseNames(); } }
+
+        /* ===== BASE DE ENDEREÇOS ===== */
+        function saveBaseAddresses() { localStorage.setItem('funaseBaseAddr_v1', JSON.stringify(baseAddresses)); updateAddressDatalist(); renderMenuAddresses(); }
+        function updateAddressDatalist() { document.getElementById('address-list').innerHTML = baseAddresses.sort().map(a => `<option value="${a}">`).join(''); }
+        function renderMenuAddresses() {
+            document.getElementById('manage-address-list').innerHTML = baseAddresses.map((addr, idx) => `
+                <li class="manage-item"><input type="text" class="manage-input" value="${addr}" onchange="updateBaseAddress(${idx}, this.value)"><button class="chip-remove" style="width:36px; height:36px; color:var(--danger);" onclick="removeBaseAddress(${idx})">×</button></li>`).join('');
+        }
+        function updateBaseAddress(idx, newVal) { newVal = newVal.trim(); if(newVal) { baseAddresses[idx] = newVal; saveBaseAddresses(); } }
+        function removeBaseAddress(idx) { baseAddresses.splice(idx, 1); saveBaseAddresses(); }
+        function addBaseAddress() { const val = document.getElementById('new-base-address').value.trim(); if(val) { baseAddresses.push(val); document.getElementById('new-base-address').value = ''; saveBaseAddresses(); } }
+
+        /* ===== HISTÓRICO (30 DIAS) ===== */
+        function cleanOldHistory() {
+            const trintaDias = 30 * 24 * 60 * 60 * 1000;
+            const agora = Date.now();
+            scheduleHistory = scheduleHistory.filter(item => (agora - item.timestamp) < trintaDias);
+            localStorage.setItem('funaseHistory_v1', JSON.stringify(scheduleHistory));
+        }
+        function saveToHistory(dateTitle, fullText) {
+            cleanOldHistory();
+            scheduleHistory.unshift({ id: Date.now(), timestamp: Date.now(), dateTitle, fullText });
+            localStorage.setItem('funaseHistory_v1', JSON.stringify(scheduleHistory));
+            renderHistory();
+        }
+        function renderHistory() {
+            cleanOldHistory();
+            const container = document.getElementById('history-container');
+            if(scheduleHistory.length === 0) {
+                container.innerHTML = '<p style="font-size:0.85rem; color:var(--border); text-align:center;">Nenhum cronograma salvo.</p>';
+                return;
+            }
+            container.innerHTML = scheduleHistory.map((item, index) => {
+                const dataCriacao = new Date(item.timestamp).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+                return `
+                <div class="history-card">
+                    <div class="history-header">
+                        <span>🗓️ ${item.dateTitle}</span>
+                        <span class="history-badge">${dataCriacao}</span>
+                    </div>
+                    <textarea class="history-preview" id="hist-text-${item.id}" readonly>${item.fullText}</textarea>
+                    <button class="btn-primary" style="padding: 10px; font-size: 0.9rem;" id="btn-hist-${item.id}" onclick="copyText('hist-text-${item.id}', 'btn-hist-${item.id}')">📋 Copiar Texto</button>
+                </div>
+            `}).join('');
+        }
+
+        /* ===== RENDER CARTÃO PRINCIPAL ===== */
         function renderCard() {
             if(activities.length === 0) return;
             const container = document.getElementById('card-container');
@@ -386,111 +328,52 @@
             document.getElementById('step-count').innerText = `ATIVIDADE ${currentStep + 1} DE ${activities.length}`;
             
             let chipsHtml = act.names.map((b, i) => `
-                <div class="chip" onclick="openObsModal(${currentStep}, ${i})">
-                    <span>${b.name}</span>
-                    ${b.obs ? `<span class="chip-obs">(${b.obs})</span>` : ''}
-                    <button class="chip-remove" onclick="event.stopPropagation(); removeBoy(${currentStep}, ${i})">×</button>
-                </div>
+                <div class="chip" onclick="openObsModal(${currentStep}, ${i})"><span>${b.name}</span>${b.obs ? `<span class="chip-obs">(${b.obs})</span>` : ''}<button class="chip-remove" onclick="event.stopPropagation(); removeBoy(${currentStep}, ${i})">×</button></div>
             `).join('');
 
             container.innerHTML = `
                 <div class="card-main">
-                    <div class="card-title-group">
-                        <label style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">TÍTULO DA ATIVIDADE</label>
-                        <input type="text" value="${act.title}" class="input-title" onchange="updateAct('title', this.value)">
-                    </div>
-                    
-                    <div class="time-display">
-                        <input type="time" class="time-input-hidden" value="${act.time}" onchange="updateAct('time', this.value)">
-                    </div>
-                    
-                    <div class="clean-field">
-                        <label>Endereço / Local</label>
-                        <input type="text" class="clean-input" list="address-list" placeholder="Opcional..." value="${act.address || ''}" onchange="updateAct('address', this.value)">
-                    </div>
-
-                    <div class="clean-field">
-                        <label>Observação da Atividade</label>
-                        <input type="text" class="clean-input" placeholder="Opcional..." value="${act.obs || ''}" onchange="updateAct('obs', this.value)">
-                    </div>
-
-                    <div class="clean-field">
-                        <label>Adolescentes</label>
-                        <div class="add-row">
-                            <input type="text" id="add-name-input" class="clean-input" list="adolescentes-list" placeholder="Nome do adolescente..." onkeypress="if(event.key === 'Enter') addBoy()">
-                            <button class="btn-primary" style="flex:0; padding: 10px 20px;" onclick="addBoy()">Add</button>
-                        </div>
-                    </div>
-                    
-                    <div class="chips-container">
-                        ${chipsHtml || '<span style="font-size:0.85rem; color:var(--border);">Nenhum nome adicionado.</span>'}
-                    </div>
-
+                    <div class="card-title-group"><label style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">TÍTULO DA ATIVIDADE</label><input type="text" value="${act.title}" class="input-title" onchange="updateAct('title', this.value)"></div>
+                    <div class="time-display"><input type="time" class="time-input-hidden" value="${act.time}" onchange="updateAct('time', this.value)"></div>
+                    <div class="clean-field"><label>Endereço / Local</label><input type="text" class="clean-input" list="address-list" placeholder="Opcional..." value="${act.address || ''}" onchange="updateAct('address', this.value)"></div>
+                    <div class="clean-field"><label>Observação da Atividade</label><input type="text" class="clean-input" placeholder="Opcional..." value="${act.obs || ''}" onchange="updateAct('obs', this.value)"></div>
+                    <div class="clean-field"><label>Adolescentes</label><div class="add-row"><input type="text" id="add-name-input" class="clean-input" list="adolescentes-list" placeholder="Nome do adolescente..." onkeypress="if(event.key === 'Enter') addBoy()"><button class="btn-primary" style="flex:0; padding: 10px 20px;" onclick="addBoy()">Add</button></div></div>
+                    <div class="chips-container">${chipsHtml || '<span style="font-size:0.85rem; color:var(--border);">Nenhum nome adicionado.</span>'}</div>
                     <div class="card-nav">
-                        <button class="btn-icon" onclick="prevCard()" ${currentStep === 0 ? 'disabled' : ''}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                        </button>
-                        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted);">
-                            Passo ${currentStep + 1}
-                        </span>
-                        <button class="btn-icon" onclick="nextCard()" ${currentStep === activities.length - 1 ? 'disabled' : ''}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
+                        <button class="btn-icon" onclick="prevCard()" ${currentStep === 0 ? 'disabled' : ''}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted);">Passo ${currentStep + 1}</span>
+                        <button class="btn-icon" onclick="nextCard()" ${currentStep === activities.length - 1 ? 'disabled' : ''}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                     </div>
                 </div>
             `;
         }
 
-        /* Lógica e Manipulação */
         function updateAct(field, val) { activities[currentStep][field] = val; saveActivities(); }
-        function addBoy() {
-            const input = document.getElementById('add-name-input');
-            const val = input.value.trim().toUpperCase();
-            if (val) { activities[currentStep].names.push({ name: val, obs: '' }); input.value = ''; saveActivities(); renderCard(); }
-        }
+        function addBoy() { const input = document.getElementById('add-name-input'); const val = input.value.trim().toUpperCase(); if (val) { activities[currentStep].names.push({ name: val, obs: '' }); input.value = ''; saveActivities(); renderCard(); } }
         function removeBoy(actIdx, boyIdx) { activities[actIdx].names.splice(boyIdx, 1); saveActivities(); renderCard(); }
         function addNewActivity() { activities.push({ title: 'NOVA ATIVIDADE', time: '12:00', address: '', obs: '', names: [] }); currentStep = activities.length - 1; saveActivities(); renderCard(); }
         function prevCard() { if (currentStep > 0) { currentStep--; renderCard(); } }
         function nextCard() { if (currentStep < activities.length - 1) { currentStep++; renderCard(); } }
 
         /* Modais de Observação */
-        function openObsModal(actIdx, boyIdx) {
-            const boy = activities[actIdx].names[boyIdx];
-            document.getElementById('obs-boy-name').innerText = boy.name.split(' ')[0];
-            document.getElementById('obs-input').value = boy.obs || '';
-            document.getElementById('obs-act-index').value = actIdx;
-            document.getElementById('obs-boy-index').value = boyIdx;
-            document.getElementById('obs-modal').style.display = 'flex';
-        }
+        function openObsModal(actIdx, boyIdx) { const boy = activities[actIdx].names[boyIdx]; document.getElementById('obs-boy-name').innerText = boy.name.split(' ')[0]; document.getElementById('obs-input').value = boy.obs || ''; document.getElementById('obs-act-index').value = actIdx; document.getElementById('obs-boy-index').value = boyIdx; document.getElementById('obs-modal').style.display = 'flex'; }
         function closeObsModal() { document.getElementById('obs-modal').style.display = 'none'; }
-        function saveBoyObs() {
-            const actIdx = document.getElementById('obs-act-index').value;
-            const boyIdx = document.getElementById('obs-boy-index').value;
-            activities[actIdx].names[boyIdx].obs = document.getElementById('obs-input').value.trim();
-            saveActivities(); closeObsModal(); renderCard();
-        }
+        function saveBoyObs() { const actIdx = document.getElementById('obs-act-index').value; const boyIdx = document.getElementById('obs-boy-index').value; activities[actIdx].names[boyIdx].obs = document.getElementById('obs-input').value.trim(); saveActivities(); closeObsModal(); renderCard(); }
 
-        /* Nomes / Datalist */
-        function updateDatalist() { document.getElementById('adolescentes-list').innerHTML = baseNames.sort().map(n => `<option value="${n}">`).join(''); }
-        function renderMenuNames() {
-            document.getElementById('manage-names-list').innerHTML = baseNames.map((name, idx) => `
-                <li class="manage-item">
-                    <input type="text" class="manage-input" value="${name}" onchange="updateBaseName(${idx}, this.value)">
-                    <button class="chip-remove" style="width:36px; height:36px; color:var(--danger);" onclick="removeBaseName(${idx})">×</button>
-                </li>`).join('');
-        }
-        function updateBaseName(idx, newVal) { newVal = newVal.trim().toUpperCase(); if(newVal) { baseNames[idx] = newVal; saveBaseNames(); } }
-        function removeBaseName(idx) { baseNames.splice(idx, 1); saveBaseNames(); }
-        function addBaseName() { const val = document.getElementById('new-base-name').value.trim().toUpperCase(); if(val) { baseNames.push(val); document.getElementById('new-base-name').value = ''; saveBaseNames(); } }
-
-        /* Relatório */
-        function generateText() {
+        /* Relatório e Cópia */
+        function getFormatterDateStr() {
             const days = ['DOMINGO', 'SEGUNDA FEIRA', 'TERÇA FEIRA', 'QUARTA FEIRA', 'QUINTA FEIRA', 'SEXTA FEIRA', 'SÁBADO'];
             const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-            let text = `${days[tomorrow.getDay()]} (${String(tomorrow.getDate()).padStart(2,'0')}/${String(tomorrow.getMonth()+1).padStart(2,'0')}):\n\n`;
+            return `${days[tomorrow.getDay()]} - ${String(tomorrow.getDate()).padStart(2,'0')}/${String(tomorrow.getMonth()+1).padStart(2,'0')}/${tomorrow.getFullYear()}`;
+        }
+
+        function generateText() {
+            const dateTitle = getFormatterDateStr();
+            let text = `${dateTitle}:\n\n`;
             
             const atividadesOrdenadas = activities.filter(act => act.names.length > 0).sort((a, b) => a.time.localeCompare(b.time));
-            
+            if(atividadesOrdenadas.length === 0) { alert("Adicione adolescentes às atividades para gerar o relatório."); return; }
+
             atividadesOrdenadas.forEach(act => {
                 const timeFmt = act.time.replace(':', 'h');
                 text += (act.title.toLowerCase().includes('escola')) ? `*${timeFmt} - ${act.title.toUpperCase()}*\n` : `*${act.title.toUpperCase()} ${timeFmt}*\n`;
@@ -501,18 +384,25 @@
                 text += '\n\n'; 
             });
 
-            document.getElementById('final-text').value = text.trim();
+            text = text.trim();
+            document.getElementById('final-text').value = text;
             document.getElementById('output-modal').style.display = 'flex';
+            
+            // Salva no histórico automaticamente
+            saveToHistory(dateTitle, text);
         }
         function closeOutputModal() { document.getElementById('output-modal').style.display = 'none'; }
         
-        async function copyText() {
-            const textarea = document.getElementById('final-text');
+        async function copyText(textareaId, btnId) {
+            const textarea = document.getElementById(textareaId);
+            const btn = document.getElementById(btnId);
+            const originalText = btn.innerText;
             try {
                 await navigator.clipboard.writeText(textarea.value);
-                const btn = document.querySelector('.btn-copy'); btn.innerText = 'Copiado! ✓'; setTimeout(() => btn.innerText = 'Copiar', 2000);
+                btn.innerText = 'Copiado! ✓'; setTimeout(() => btn.innerText = originalText, 2000);
             } catch (err) {
                 textarea.select(); document.execCommand('copy');
+                btn.innerText = 'Copiado! ✓'; setTimeout(() => btn.innerText = originalText, 2000);
             }
         }
         function sendToWhatsApp() {
@@ -520,9 +410,12 @@
             window.open(`https://api.whatsapp.com/send?text=${textToShare}`, '_blank');
         }
         
-        /* Init */
-        updateDatalist();
+        /* Inicialização */
+        updateNamesDatalist();
+        updateAddressDatalist();
         renderMenuNames();
+        renderMenuAddresses();
+        renderHistory();
         renderCard();
     </script>
 </body>
