@@ -464,11 +464,17 @@
         }
         function sendToWhatsApp() {
             const textarea = document.getElementById('final-text');
-            // O encodeURIComponent transforma espaços e quebras de linha em formato de link
             const textToShare = encodeURIComponent(textarea.value);
             
-            // Abre o WhatsApp com o texto pré-preenchido
-            window.open(`https://wa.me/?text=${textToShare}`, '_blank');
+            // Cria um link invisível na tela (Truque para forçar o Safari a levar o texto)
+            const link = document.createElement('a');
+            link.href = `https://api.whatsapp.com/send?text=${textToShare}`;
+            link.target = '_blank';
+            
+            // Adiciona na página, clica e remove instantaneamente
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
         // Inicializa Datalist e Primeira Tela
         updateDatalist();
