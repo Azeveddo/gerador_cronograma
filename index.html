@@ -51,24 +51,77 @@
         }
 
         .btn-hamburger { 
-            background: none; border: none; color: white; padding: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: -8px; 
+            background: none; 
+            border: none; 
+            color: white; 
+            padding: 8px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-left: -8px; 
         }
-        .app-header h1 { font-size: 1.1rem; margin: 0; font-weight: 700; letter-spacing: 0.5px; }
+
+        .app-header h1 { 
+            font-size: 1.1rem; 
+            margin: 0; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+        }
+
         .header-spacer { width: 40px; }
 
-        .step-indicator { text-align: center; font-size: 0.85rem; color: var(--text-muted); margin: 20px 0 10px 0; font-weight: 600; }
-
-        .stack-area { position: relative; padding: 0 20px; margin-top: 10px; }
-        .stack-bg-2 { position: absolute; top: 24px; left: 36px; right: 36px; bottom: -24px; background: rgba(255, 255, 255, 0.4); border-radius: 24px; z-index: 1; }
-        .stack-bg-1 { position: absolute; top: 12px; left: 28px; right: 28px; bottom: -12px; background: rgba(255, 255, 255, 0.7); border-radius: 24px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-
-        .card-main {
-            position: relative; background-color: var(--card-bg); border-radius: 24px; padding: 24px; 
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1); z-index: 3; border: 1px solid rgba(0,0,0,0.03);
-            animation: slideIn 0.3s ease-out; display: flex; flex-direction: column; gap: 20px;
+        .step-indicator { 
+            text-align: center; 
+            font-size: 0.85rem; 
+            color: var(--text-muted); 
+            margin: 20px 0 10px 0; 
+            font-weight: 600; 
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        /* CORREÇÃO 3: Espaço extra na parte inferior para os cards não baterem no dock */
+        .stack-area { 
+            position: relative; 
+            padding: 0 20px; 
+            margin-top: 10px; 
+            margin-bottom: 35px; /* Empurra o dock para baixo dando respiro */
+        }
+
+        .stack-bg-2 { 
+            position: absolute; 
+            top: 24px; left: 36px; right: 36px; bottom: -24px; 
+            background: rgba(255, 255, 255, 0.4); 
+            border-radius: 24px; 
+            z-index: 1; 
+        }
+
+        .stack-bg-1 { 
+            position: absolute; 
+            top: 12px; left: 28px; right: 28px; bottom: -12px; 
+            background: rgba(255, 255, 255, 0.7); 
+            border-radius: 24px; 
+            z-index: 2; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); 
+        }
+
+        .card-main {
+            position: relative; 
+            background-color: var(--card-bg); 
+            border-radius: 24px; 
+            padding: 24px; 
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1); 
+            z-index: 3; 
+            border: 1px solid rgba(0,0,0,0.03);
+            animation: slideIn 0.3s ease-out; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+        }
+
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateX(20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
 
         .card-title-group { display: flex; flex-direction: column; gap: 4px; }
         .input-title { -webkit-appearance: none; font-size: 1.1rem; font-weight: 800; background: transparent; border: none; color: var(--header-bg); width: 100%; text-transform: uppercase; font-family: inherit; text-overflow: ellipsis; }
@@ -90,7 +143,7 @@
         .chip-remove { background: #e2e8f0; border: none; color: var(--text-muted); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
         
         .add-row { display: flex; gap: 8px; }
-        .add-row .clean-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; }
+        .add-row .clean-input { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 8px; }
 
         .card-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 20px; border-top: 1px dashed var(--border); }
         .btn-icon { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--header-bg); transition: 0.2s; }
@@ -122,7 +175,7 @@
         .manage-item { display: flex; gap: 8px; margin-bottom: 12px; }
         .manage-input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; }
 
-        /* Histórico */
+        /* Estilos do Histórico */
         .history-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; background: #f8fafc; }
         .history-header { font-weight: 800; color: var(--header-bg); font-size: 0.9rem; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
         .history-preview { font-family: inherit; font-size: 0.8rem; color: var(--text-muted); white-space: pre-wrap; max-height: 120px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin: 0 0 12px 0; }
@@ -130,36 +183,14 @@
 
         /* ESTILOS DO AUTOCOMPLETE CUSTOMIZADO */
         .autocomplete-items {
-            position: absolute;
-            border: 1px solid var(--border);
-            border-top: none;
-            z-index: 99;
-            top: 100%;
-            left: 0;
-            right: 0;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            max-height: 180px;
-            overflow-y: auto;
+            position: absolute; border: 1px solid var(--border); border-top: none; z-index: 99; top: 100%; left: 0; right: 0;
+            border-radius: 0 0 8px 8px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); background-color: #fff; max-height: 180px; overflow-y: auto;
         }
         .autocomplete-items div {
-            padding: 12px 14px;
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            font-weight: 500;
+            padding: 12px 14px; cursor: pointer; background-color: #fff; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: var(--text-main); font-weight: 500;
         }
-        .autocomplete-items div:hover {
-            background-color: #f8fafc;
-            color: var(--primary);
-        }
-        .autocomplete-items div:last-child {
-            border-bottom: none;
-            border-radius: 0 0 8px 8px;
-        }
+        .autocomplete-items div:hover { background-color: #f8fafc; color: var(--primary); }
+        .autocomplete-items div:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
         .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
@@ -184,22 +215,24 @@
                 <button class="drawer-menu-btn" onclick="openDrawerView('view-history', 'Histórico')">🕒 Histórico (30 dias)</button>
             </div>
 
+            <!-- CORREÇÃO 2: Botão Add do submenu Nomes virou + -->
             <div class="drawer-content" id="view-names">
                 <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Atualize a base de adolescentes para o preenchimento automático.</p>
                 <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-                    <input type="text" id="new-base-name" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1;" placeholder="Novo adolescente...">
-                    <button class="btn-add-new" style="padding: 10px; border-radius: 8px;" onclick="addBaseName()">Add</button>
+                    <input type="text" id="new-base-name" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1; min-width: 0;" placeholder="Novo adolescente...">
+                    <button class="btn-add-new" style="flex: 0 0 auto; width: 44px; height: 44px; padding: 0; font-size: 1.5rem;" onclick="addBaseName()">+</button>
                 </div>
                 <ul class="manage-list" id="manage-names-list"></ul>
             </div>
 
+            <!-- CORREÇÃO 2: Botão Add do submenu Endereços virou + -->
             <div class="drawer-content" id="view-addresses">
                 <button class="btn-back-menu" onclick="openDrawerView('view-menu', 'Painel de Controle')">← Voltar ao Menu</button>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:0;">Cadastre locais e endereços recorrentes.</p>
                 <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-                    <input type="text" id="new-base-address" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1;" placeholder="Novo endereço...">
-                    <button class="btn-add-new" style="padding: 10px; border-radius: 8px;" onclick="addBaseAddress()">Add</button>
+                    <input type="text" id="new-base-address" class="clean-input" style="border: 1px solid var(--border); border-radius: 8px; flex: 1; min-width: 0;" placeholder="Novo endereço...">
+                    <button class="btn-add-new" style="flex: 0 0 auto; width: 44px; height: 44px; padding: 0; font-size: 1.5rem;" onclick="addBaseAddress()">+</button>
                 </div>
                 <ul class="manage-list" id="manage-address-list"></ul>
             </div>
@@ -301,38 +334,30 @@
         
         /* ====== LÓGICA DE AUTO-COMPLETE CUSTOMIZADO ====== */
         function setupAutocomplete(inp, arr, isNameInput = false) {
-            // Se o usuário digitar algo...
             inp.addEventListener("input", function(e) {
                 let a, b, val = this.value;
                 closeAllLists();
-                // Verifica se tem ao menos 1 letra
                 if (!val) { return false;}
                 
-                // Cria o menu dropdown (div)
                 a = document.createElement("DIV");
                 a.setAttribute("id", this.id + "autocomplete-list");
                 a.setAttribute("class", "autocomplete-items");
                 this.parentNode.appendChild(a);
                 
-                // Normaliza o texto digitado (remove acentos e deixa minúsculo)
                 const normalizedVal = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
                 
-                // Busca na base
                 for (let i = 0; i < arr.length; i++) {
                     const normalizedItem = arr[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
                     
-                    // Se encontrar correspondência em qualquer parte da string
                     if (normalizedItem.includes(normalizedVal)) {
                         b = document.createElement("DIV");
-                        b.innerHTML = arr[i]; // Mostra o nome real
+                        b.innerHTML = arr[i]; 
                         b.innerHTML += "<input type='hidden' value='" + arr[i].replace(/'/g, "&#39;") + "'>";
                         
-                        // Evento ao clicar no item sugerido
                         b.addEventListener("click", function(e) {
                             inp.value = this.getElementsByTagName("input")[0].value;
                             closeAllLists();
                             
-                            // Se for campo de nome, adiciona direto! Se for endereço, atualiza o JSON.
                             if(isNameInput) {
                                 addBoy(); 
                             } else {
@@ -352,10 +377,7 @@
                     }
                 }
             }
-            // Fecha ao clicar fora
-            document.addEventListener("click", function (e) {
-                closeAllLists(e.target);
-            });
+            document.addEventListener("click", function (e) { closeAllLists(e.target); });
         }
 
         /* ====== Drawer Nav ====== */
@@ -450,7 +472,7 @@
                 </div>
             `).join('');
 
-            // Repare na alteração: o input agora fica dentro de <div style="position: relative;"> e usa autocomplete="off"
+            // CORREÇÃO 1: Botão Add do card virou um + quadrado flex fixo.
             container.innerHTML = `
                 <div class="card-main">
                     <div class="card-title-group">
@@ -477,10 +499,10 @@
                     <div class="clean-field">
                         <label>Adolescentes</label>
                         <div class="add-row">
-                            <div style="position: relative; flex: 1;">
+                            <div style="position: relative; flex: 1; min-width: 0;">
                                 <input type="text" id="add-name-input" class="clean-input" style="width: 100%; box-sizing: border-box;" placeholder="Nome do adolescente..." onkeypress="if(event.key === 'Enter') addBoy()" autocomplete="off">
                             </div>
-                            <button class="btn-primary" style="flex:0; padding: 10px 20px;" onclick="addBoy()">Add</button>
+                            <button class="btn-primary" style="flex: 0 0 auto; width: 44px; height: 44px; padding: 0; font-size: 1.5rem;" onclick="addBoy()">+</button>
                         </div>
                     </div>
                     
@@ -500,7 +522,6 @@
                 </div>
             `;
 
-            // Ativa o auto-complete customizado para os inputs que acabamos de renderizar
             setupAutocomplete(document.getElementById('address-input'), baseAddresses, false);
             setupAutocomplete(document.getElementById('add-name-input'), baseNames, true);
         }
