@@ -103,7 +103,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.02); 
         }
 
-        /* Cartão Principal: Animação isolada para não piscar */
         .card-main {
             position: relative; 
             background-color: var(--card-bg); 
@@ -528,8 +527,13 @@
                 </div>
             `;
 
+            // Mapeia quais nomes JÁ ESTÃO no card atual
+            const currentAddedNames = act.names.map(b => b.name);
+            // Filtra a base baseNames para repassar ao autocomplete SOMENTE quem ainda não foi adicionado
+            const availableNames = baseNames.filter(n => !currentAddedNames.includes(n));
+
             setupAutocomplete(document.getElementById('address-input'), baseAddresses, false);
-            setupAutocomplete(document.getElementById('add-name-input'), baseNames, true);
+            setupAutocomplete(document.getElementById('add-name-input'), availableNames, true);
         }
 
         function updateAct(field, val) { activities[currentStep][field] = val; saveActivities(); }
@@ -538,6 +542,14 @@
             const input = document.getElementById('add-name-input'); 
             const val = input.value.trim().toUpperCase(); 
             if (val) { 
+                // Impede adição duplicada caso o usuário insira manualmente (bypass do autocomplete)
+                const isDuplicate = activities[currentStep].names.some(b => b.name === val);
+                if (isDuplicate) {
+                    alert("Este adolescente já foi adicionado a esta atividade!");
+                    input.value = '';
+                    return;
+                }
+
                 activities[currentStep].names.push({ name: val, obs: '' }); 
                 input.value = ''; 
                 saveActivities(); 
